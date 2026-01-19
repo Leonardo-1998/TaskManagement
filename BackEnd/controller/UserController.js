@@ -1,7 +1,6 @@
 const pool = require("../config/Config");
 const { hashPassword, comparePassword } = require("../utils/Bcryptjs");
 const { signToken } = require("../utils/JWT");
-const ResponseError = require("../utils/ResponseError");
 
 class UserController {
   static async registerUser(req, res, next) {

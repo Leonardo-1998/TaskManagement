@@ -37,8 +37,9 @@ const migrate = async () => {
     const queryCreateTableTaskLists = `
         CREATE TABLE IF NOT EXISTS "Task_Lists" (
         id SERIAL PRIMARY KEY,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL
+        nama VARCHAR(255) NOT NULL,
+        deskripsi VARCHAR(255) NULL,
+        daftar_tugas VARCHAR(255) NULL
         )
     `;
 
@@ -56,8 +57,9 @@ const migrate = async () => {
     const queryCreateTableTasks = `
         CREATE TABLE IF NOT EXISTS "Tasks" (
         id SERIAL PRIMARY KEY,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL
+        Judul VARCHAR(255) NOT NULL,
+        Status VARCHAR(255) NOT NULL,
+        Tanggal_Deadline DATE NULL
         )
     `;
 
