@@ -11,10 +11,6 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get("/api/test", (req, res) => {
-  res.send("Routing bekerja!");
-});
-
 app.use("/api/user", userRouter);
 app.use("/api/task", taskRouter);
 app.use("/api/task_list", taskListRouter);
