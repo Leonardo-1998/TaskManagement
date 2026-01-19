@@ -1,5 +1,6 @@
 const pool = require("../config/Config");
 const { hashPassword, comparePassword } = require("../utils/Bcryptjs");
+const { signToken } = require("../utils/JWT");
 const ResponseError = require("../utils/ResponseError");
 
 class UserController {
@@ -55,9 +56,12 @@ class UserController {
         throw error;
       }
 
+      const payload = { email: data.email };
+      const accessToken = signToken(payload);
+
       res.status(200).json({
         statusCode: 200,
-        message: { email: data.email },
+        access_token: accessToken,
       });
     } catch (error) {
       next(error);
