@@ -19,6 +19,20 @@ class TaskController {
     }
   }
 
+  static async getTaskById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const taskData = await TaskController.getOneTask(id);
+
+      res.status(200).json({
+        statusCode: 200,
+        message: taskData,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getTaskByTaskListId(req, res, next) {
     try {
       const { task_list_id } = req.params;
@@ -77,15 +91,6 @@ class TaskController {
         throw error;
       }
 
-      let statusString = "";
-      if (status === "1") {
-        statusString = "To Do";
-      } else if (status === "2") {
-        statusString = "In Progress";
-      } else {
-        statusString = "Done";
-      }
-
       const query = `
             UPDATE "Tasks"
             SET judul = $1,
@@ -96,7 +101,7 @@ class TaskController {
             ;
         `;
 
-      const values = [judul, statusString, tanggal_deadline, id];
+      const values = [judul, status, tanggal_deadline, id];
       const { rows: dataTasks } = await pool.query(query, values);
 
       res.status(200).json({

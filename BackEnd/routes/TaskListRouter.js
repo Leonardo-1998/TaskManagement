@@ -4,8 +4,8 @@ const router = express.Router();
 
 // router.get("/", TaskListController.getAllTasksList);
 router.get("/", TaskListController.getAllTasksListByUser);
-router.get("/:id", TaskListController.getOneTaskList);
 router.post("/create", TaskListController.createNewTaskList);
+router.get("/update/:id", TaskListController.getOneTaskList);
 router.put("/update/:id", TaskListController.updateTaskList);
 router.delete("/delete/:id", TaskListController.deleteTaskList);
 
