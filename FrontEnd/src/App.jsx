@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router";
 import Register from "../route/Register";
 import Login from "../route/Login";
-import Home from "../route/Home";
-import TaskList from "../route/TaskListDetails";
+import TaskList from "../route/TaskList";
+import Task from "../route/Task";
 import AddTaskList from "../route/AddTaskList";
 import AuthLayout from "../layout/AuthLayout";
 import LoginCheck from "../layout/LoginCheck";
@@ -20,9 +20,9 @@ export default function App() {
         </Route>
 
         <Route element={<AuthLayout />}>
-          <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<TaskList />} />
           <Route path="/add_task_list" element={<AddTaskList />} />
-          <Route path="/task_list/:task_list_id" element={<TaskList />} />
+          <Route path="/task_list/:task_list_id" element={<Task />} />
           <Route
             path="/task_list/:task_list_id/update"
             element={<UpdateTaskList />}

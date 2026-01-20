@@ -4,6 +4,7 @@ const router = express.Router({ mergeParams: true });
 
 router.get("/", TaskController.getTaskByTaskListId);
 router.post("/create", TaskController.createNewTask);
+router.put("/swap", TaskController.swapTask);
 router.get("/update/:id", TaskController.getTaskById);
 router.put("/update/:id", TaskController.updateTask);
 router.delete("/delete/:id", TaskController.deleteTask);

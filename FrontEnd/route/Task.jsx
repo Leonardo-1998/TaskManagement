@@ -2,12 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router";
 
-export default function TaskListDetails() {
+export default function Task() {
   const navigate = useNavigate();
   const { task_list_id } = useParams();
   const [dataTask, setDataTask] = useState([]);
-
   const token = localStorage.getItem("access_token");
+
   const fetchData = async () => {
     try {
       if (!task_list_id) {
@@ -20,9 +20,44 @@ export default function TaskListDetails() {
       );
 
       setDataTask(response.data.message);
+      console.log(response.data.message);
     } catch (error) {
       console.log("Gagal mengambil data.");
     }
+  };
+
+  const handleSwap = async (dataToSwap) => {
+    try {
+      await axios.put(
+        `http://localhost:3000/api/task/${task_list_id}/swap`,
+        dataToSwap,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      fetchData();
+    } catch (error) {
+      console.log("Gagal melakukan pertukaran");
+    }
+  };
+
+  const handleSwapUp = (index) => {
+    const dataToSwap = {
+      upperData: dataTask[index - 1],
+      lowerData: dataTask[index],
+    };
+    handleSwap(dataToSwap);
+  };
+
+  const handleSwapDown = (index) => {
+    const dataToSwap = {
+      upperData: dataTask[index],
+      lowerData: dataTask[index + 1],
+    };
+    handleSwap(dataToSwap);
   };
 
   const handleDelete = async (task_id) => {
@@ -57,6 +92,7 @@ export default function TaskListDetails() {
             <th>Status</th>
             <th>Tanggal Deadline</th>
             <th>Action</th>
+            <th>Placement</th>
           </tr>
         </thead>
         <tbody>
@@ -72,6 +108,20 @@ export default function TaskListDetails() {
                     <button>Update</button>
                   </Link>
                   <button onClick={() => handleDelete(task.id)}>Delete</button>
+                </td>
+                <td>
+                  <button
+                    disabled={index === 0 ? true : false}
+                    onClick={() => handleSwapUp(index)}
+                  >
+                    ^
+                  </button>
+                  <button
+                    disabled={index === dataTask.length - 1 ? true : false}
+                    onClick={() => handleSwapDown(index)}
+                  >
+                    v
+                  </button>
                 </td>
               </tr>
             );
