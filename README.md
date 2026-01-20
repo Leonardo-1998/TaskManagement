@@ -1,6 +1,6 @@
 # 📋 Task Management System
 
-Aplikasi full-stck yang digunakan untuk mengatur daftar tugas dengan fitur membuat, mengedit, undo edit, delete dan soft delete daftar tugas.
+A full-stack task management application featuring dynamic reordering (swap), soft deletion with undo capabilities, and secure JWT authentication.
 
 ## 🚀 Tech Stack
 
@@ -10,12 +10,21 @@ Aplikasi full-stck yang digunakan untuk mengatur daftar tugas dengan fitur membu
 
 ## 🛠️ Key Features
 
-1. **Authentication:** Login dengan JSON Web Tokens.
-2. **Task Reordering:** Menukar posisi daftar tugas yang terintegrasi ke dalam SQL.
-3. **Soft Delete:** Menghapus data yang ditampilkan tapi masih ada di database (Undo).
-4. **Undo Update:** Mengembalikan update data terakhir (Undo).
+1. **Authentication:** Register and login with hashed passwords and JWT.
+2. **Task Reordering:** Swap task positions using SQL updates.
+3. **Soft Delete:** Safeguard data by marking records as deleted instead of immediate removal.
+4. **Undo Update:** Restore recently updated tasks using React Router state.
+5. **Request Validation**: Strict data integrity checks using Joi middlewares.
 
-## 📂 API Endpoints
+## 📂 Database Schema
+
+The database consists of three main tables:
+
+1. **Users**: Stores credentials (email, hashed password).
+2. **Task_Lists**: Groups of tasks belonging to a specific user.
+3. **Tasks**: Groups of items with title, status, and tanggal_deadline belongin to a specific task list.
+
+## 📡 API Endpoints
 
 | Method | Endpoint                                  | Description                                      |
 | :----- | :---------------------------------------- | :----------------------------------------------- |
@@ -39,6 +48,41 @@ Aplikasi full-stck yang digunakan untuk mengatur daftar tugas dengan fitur membu
 ## ⚙️ Installation
 
 1. Clone the repository.
+
+```bash
+git clone https://github.com/Leonardo-1998/TaskManagement.git
+cd TaskManagement
+```
+
 2. Run `npm install` in both `frontend` and `backend` folders.
-3. Setup `.env` file for Database URL and JWT Secret.
-4. Run `npm start` (Frontend) and `npm run dev` (Backend).
+
+```bash
+# Install backend dependencies
+
+cd backend
+npm install
+
+# Install frontend dependencies
+
+cd ../frontend
+npm install
+```
+
+3. Setup `.env` file for Database user and password and JWT Secret.
+
+```bash
+JWT_KEY=#####
+USER_DB=#####
+PASSWORD_DB=#####
+```
+
+4. Run `npm run dev` (Frontend) and `npm run mig`, `npm run dev` (Backend).
+
+```bash
+# Run backend (from backend folder)
+npm run mig
+npm run dev
+
+# Run frontend (from frontend folder)
+npm run dev
+```
