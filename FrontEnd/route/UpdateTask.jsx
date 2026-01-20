@@ -1,15 +1,16 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
-export default function AddTask() {
+export default function UpdateTask() {
   const navigate = useNavigate();
-  const { task_list_id } = useParams();
+  const { task_list_id, task_id } = useParams();
   const [dataForm, setDataForm] = useState({
     judul: "",
     status: "To Do",
     tanggal_deadline: "",
   });
+  const token = localStorage.getItem("access_token");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,11 +20,10 @@ export default function AddTask() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const postData = async () => {
-      const token = localStorage.getItem("access_token");
+    const updateData = async () => {
       try {
-        await axios.post(
-          `http://localhost:3000/api/task/${task_list_id}/create`,
+        await axios.put(
+          `http://localhost:3000/api/task/${task_list_id}/update/${task_id}`,
           dataForm,
           {
             headers: {
@@ -36,11 +36,33 @@ export default function AddTask() {
         navigate(`/task_list/${task_list_id}`);
       } catch (error) {
         console.log("Gagal mengirimkan data.");
+        console.log(error);
       }
     };
 
-    postData();
+    updateData();
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/task/${task_list_id}/update/${task_id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
+        setDataForm(response.data.message);
+        console.log(response.data.message);
+      } catch (error) {
+        console.log("Gagal mengambil data.");
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -57,6 +79,7 @@ export default function AddTask() {
                   name="judul"
                   id="judul"
                   onChange={handleChange}
+                  value={dataForm.judul}
                   required
                 />
               </td>
@@ -88,12 +111,13 @@ export default function AddTask() {
                   name="tanggal_deadline"
                   id="tanggal_deadline"
                   onChange={handleChange}
+                  value={dataForm.tanggal_deadline}
                 />
               </td>
             </tr>
             <tr>
               <td>
-                <button type="submit">Add Task</button>
+                <button type="submit">Update Task</button>
                 <Link to={`/task_list/${task_list_id}`}>
                   <button>Cancel</button>
                 </Link>

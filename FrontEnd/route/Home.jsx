@@ -67,8 +67,11 @@ export default function Home() {
                   <Link to={`/task_list/${taskList.id}`}>
                     <button>Details</button>
                   </Link>
+                  <Link to={`/task_list/${taskList.id}/update`}>
+                    <button>Update</button>
+                  </Link>
                   <button onClick={() => handleDelete(taskList.id)}>
-                    Delete Task List
+                    Delete
                   </button>
                 </td>
               </tr>

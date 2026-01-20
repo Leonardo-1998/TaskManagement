@@ -68,7 +68,9 @@ export default function TaskListDetails() {
                 <td>{task.status}</td>
                 <td>{task.tanggal_deadline}</td>
                 <td>
-                  <button>Update</button>
+                  <Link to={`/task_list/${task_list_id}/update/${task.id}`}>
+                    <button>Update</button>
+                  </Link>
                   <button onClick={() => handleDelete(task.id)}>Delete</button>
                 </td>
               </tr>

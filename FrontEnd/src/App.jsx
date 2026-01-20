@@ -7,6 +7,8 @@ import AddTaskList from "../route/AddTaskList";
 import AuthLayout from "../layout/AuthLayout";
 import LoginCheck from "../layout/LoginCheck";
 import AddTask from "../route/AddTask";
+import UpdateTaskList from "../route/UpdateTaskList";
+import UpdateTask from "../route/UpdateTask";
 
 export default function App() {
   return (
@@ -22,8 +24,16 @@ export default function App() {
           <Route path="/add_task_list" element={<AddTaskList />} />
           <Route path="/task_list/:task_list_id" element={<TaskList />} />
           <Route
+            path="/task_list/:task_list_id/update"
+            element={<UpdateTaskList />}
+          />
+          <Route
             path="/task_list/:task_list_id/create_task"
             element={<AddTask />}
+          />
+          <Route
+            path="/task_list/:task_list_id/update/:task_id"
+            element={<UpdateTask />}
           />
         </Route>
         <Route path="*" element={<Navigate to="/home" replace />} />
