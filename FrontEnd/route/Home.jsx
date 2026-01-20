@@ -6,28 +6,43 @@ export default function Home() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
+  const token = localStorage.getItem("access_token");
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/task_list", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setData(response.data.message);
+      console.log(response.data.message);
+    } catch (error) {
+      console.log("Gagal mengambil data.");
+    }
+  };
+
   const addTaskList = () => {
     navigate("/add_task_list");
   };
 
+  const handleDelete = async (task_list_id) => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/api/task_list/delete/${task_list_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      fetchData();
+    } catch (error) {
+      console.log("Gagal menghapus data.");
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/task_list",
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-
-        setData(response.data.message);
-        console.log(response.data.message);
-      } catch (error) {
-        console.log("Gagal mengambil data.");
-      }
-    };
-
     fetchData();
   }, []);
+
   return (
     <>
       <button onClick={addTaskList}>Add Task List</button>
@@ -49,7 +64,12 @@ export default function Home() {
                 <td>{taskList.nama}</td>
                 <td>{taskList.deskripsi}</td>
                 <td>
-                  <Link to={`/task_list/${taskList.id}`}>Details</Link>
+                  <Link to={`/task_list/${taskList.id}`}>
+                    <button>Details</button>
+                  </Link>
+                  <button onClick={() => handleDelete(taskList.id)}>
+                    Delete Task List
+                  </button>
                 </td>
               </tr>
             );

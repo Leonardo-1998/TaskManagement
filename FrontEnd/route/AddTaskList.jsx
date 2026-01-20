@@ -15,17 +15,21 @@ export default function AddTaskList() {
   };
 
   const onFormSubmit = (e) => {
-    e.preventDefault;
+    e.preventDefault();
 
     const token = localStorage.getItem("access_token");
     const postData = async () => {
       try {
-        axios.post("http://localhost:3000/api/task_list/create", dataForm, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+        await axios.post(
+          "http://localhost:3000/api/task_list/create",
+          dataForm,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
 
         navigate("/home");
       } catch (error) {
