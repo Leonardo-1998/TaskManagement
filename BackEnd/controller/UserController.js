@@ -67,23 +67,6 @@ class UserController {
     }
   }
 
-  static async getAllUsers(req, res, next) {
-    try {
-      const query = `
-            SELECT * FROM "Users"
-        `;
-
-      const { rows: allUsersData } = await pool.query(query);
-
-      res.status(200).json({
-        statusCode: 200,
-        message: allUsersData,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async getUserByEmail(email) {
     try {
       const query = `
