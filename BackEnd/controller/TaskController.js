@@ -134,6 +134,7 @@ class TaskController {
         `;
 
       const values = [judul, status, tanggal_deadline, id];
+
       const { rows: dataTasks } = await pool.query(query, values);
 
       res.status(200).json({

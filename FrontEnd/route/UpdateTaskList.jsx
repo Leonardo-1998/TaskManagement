@@ -6,6 +6,7 @@ export default function UpdateTaskList() {
   const navigate = useNavigate();
   const { task_list_id } = useParams();
   const [dataForm, setDataForm] = useState({ nama: "", deskripsi: "" });
+  const [oldData, setOldData] = useState({ nama: "", deskripsi: "" });
   const token = localStorage.getItem("access_token");
 
   const handleChange = (e) => {
@@ -32,7 +33,7 @@ export default function UpdateTaskList() {
           },
         );
 
-        navigate("/home");
+        navigate("/home", { state: oldData });
       } catch (error) {
         console.log("Gagal mengirimkan data.");
       }
@@ -52,6 +53,7 @@ export default function UpdateTaskList() {
         );
 
         setDataForm(response.data.message);
+        setOldData(response.data.message);
       } catch (error) {
         console.log("Gagal mengambil data.");
       }

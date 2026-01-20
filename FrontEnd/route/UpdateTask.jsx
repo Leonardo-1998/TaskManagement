@@ -10,6 +10,11 @@ export default function UpdateTask() {
     status: "To Do",
     tanggal_deadline: "",
   });
+  const [oldData, setOldData] = useState({
+    judul: "",
+    status: "To Do",
+    tanggal_deadline: "",
+  });
   const token = localStorage.getItem("access_token");
 
   const handleChange = (e) => {
@@ -33,7 +38,7 @@ export default function UpdateTask() {
           },
         );
 
-        navigate(`/task_list/${task_list_id}`);
+        navigate(`/task_list/${task_list_id}`, { state: oldData });
       } catch (error) {
         console.log("Gagal mengirimkan data.");
         console.log(error);
@@ -54,7 +59,7 @@ export default function UpdateTask() {
         );
 
         setDataForm(response.data.message);
-        console.log(response.data.message);
+        setOldData(response.data.message);
       } catch (error) {
         console.log("Gagal mengambil data.");
         console.log(error);

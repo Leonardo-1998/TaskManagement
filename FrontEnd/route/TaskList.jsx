@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export default function Home() {
+  const location = useLocation();
+  const oldData = location.state;
   const [dataTaskList, setDataTaskList] = useState([]);
-
+  const [clicked, setClicked] = useState(true);
   const token = localStorage.getItem("access_token");
 
   const fetchData = async () => {
@@ -30,7 +32,6 @@ export default function Home() {
       fetchData();
     } catch (error) {
       console.log("Gagal melakukan pertukaran");
-      console.log(error);
     }
   };
 
@@ -61,20 +62,45 @@ export default function Home() {
       fetchData();
     } catch (error) {
       console.log("Gagal menghapus data.");
-      console.log(error);
     }
+  };
+
+  const handleUndo = async (e) => {
+    e.preventDefault();
+
+    const updateData = async () => {
+      try {
+        await axios.put(
+          `http://localhost:3000/api/task_list/update/${oldData.id}`,
+          oldData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+
+        fetchData();
+        setClicked(true);
+      } catch (error) {
+        console.log("Gagal mengirimkan data.");
+      }
+    };
+
+    updateData();
   };
 
   useEffect(() => {
     fetchData();
+
+    if (oldData) {
+      setClicked(false);
+    }
   }, []);
 
   return (
     <>
-      <Link to={"/add_task_list"}>
-        <button>Add Task List</button>
-      </Link>
-
       <table>
         <thead>
           <tr>
@@ -122,6 +148,12 @@ export default function Home() {
           })}
         </tbody>
       </table>
+      <Link to={"/add_task_list"}>
+        <button>Add Task List</button>
+      </Link>
+      <button onClick={handleUndo} disabled={clicked}>
+        Undo
+      </button>
     </>
   );
 }

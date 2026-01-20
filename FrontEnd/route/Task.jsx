@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router";
+import { useNavigate, useLocation, useParams, Link } from "react-router";
 
 export default function Task() {
+  const location = useLocation();
+  const oldData = location.state;
   const navigate = useNavigate();
   const { task_list_id } = useParams();
   const [dataTask, setDataTask] = useState([]);
+  const [clicked, setClicked] = useState(true);
   const token = localStorage.getItem("access_token");
 
   const fetchData = async () => {
@@ -75,15 +78,42 @@ export default function Task() {
     }
   };
 
+  const handleUndo = async (e) => {
+    e.preventDefault();
+
+    const updateData = async () => {
+      try {
+        await axios.put(
+          `http://localhost:3000/api/task/${task_list_id}/update/${oldData.id}`,
+          oldData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+
+        fetchData();
+        setClicked(true);
+      } catch (error) {
+        console.log("Gagal mengirimkan data.");
+      }
+    };
+
+    updateData();
+  };
+
   useEffect(() => {
     fetchData();
+
+    if (oldData) {
+      setClicked(false);
+    }
   }, [task_list_id]);
 
   return (
     <>
-      <Link to={`/task_list/${task_list_id}/create_task`}>
-        <button>Add Task</button>
-      </Link>
       <table>
         <thead>
           <tr>
@@ -126,15 +156,17 @@ export default function Task() {
               </tr>
             );
           })}
-          <tr>
-            <td colSpan={4}>
-              <Link to="/home">
-                <button>Back to Task List</button>
-              </Link>
-            </td>
-          </tr>
         </tbody>
       </table>
+      <Link to="/home">
+        <button>Back to Task List</button>
+      </Link>
+      <Link to={`/task_list/${task_list_id}/create_task`}>
+        <button>Add Task</button>
+      </Link>
+      <button onClick={handleUndo} disabled={clicked}>
+        Undo
+      </button>
     </>
   );
 }
