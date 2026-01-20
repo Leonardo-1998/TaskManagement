@@ -18,6 +18,21 @@ class TaskListController {
     }
   }
 
+  static async getOneTaskList(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const taskListData = await TaskListController.getOneById(id);
+
+      res.status(200).json({
+        statusCode: 200,
+        message: taskListData,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getAllTasksListByUser(req, res, next) {
     try {
       const { id } = req.user;
@@ -68,7 +83,7 @@ class TaskListController {
       const { nama, deskripsi } = req.body;
       const { id } = req.params;
 
-      const search = TaskListController.getOneTaskList(id);
+      const search = TaskListController.getOneById(id);
       if (!search) {
         const error = new Error("Tidak ada data yang diupdate.");
         error.statusCode = 400;
@@ -101,7 +116,7 @@ class TaskListController {
     try {
       const { id } = req.params;
 
-      const search = await TaskListController.getOneTaskList(id);
+      const search = await TaskListController.getOneById(id);
       console.log(search);
       if (!search) {
         const error = new Error("Tidak ada data yang didelete.");
@@ -127,7 +142,7 @@ class TaskListController {
     }
   }
 
-  static async getOneTaskList(id) {
+  static async getOneById(id) {
     const query = `
       SELECT * FROM "Task_Lists"
       WHERE id = $1
