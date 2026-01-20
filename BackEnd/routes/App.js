@@ -6,14 +6,17 @@ const errorHandler = require("../middlewares/ErrorHandler");
 const userRouter = require("./UserRouter");
 const taskRouter = require("./TaskRouter");
 const taskListRouter = require("./TaskListRouter");
+const authentication = require("../middlewares/Authentication");
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use("/api/user", userRouter);
-app.use("/api/task", taskRouter);
+
+app.use(authentication);
 app.use("/api/task_list", taskListRouter);
+app.use("/api/task/:task_list_id", taskRouter);
 app.use(errorHandler);
 
 app.listen(port, () => {

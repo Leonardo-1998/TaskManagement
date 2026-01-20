@@ -64,7 +64,7 @@ const migrate = async () => {
         id SERIAL PRIMARY KEY,
         Judul VARCHAR(255) NOT NULL,
         Status VARCHAR(255) NOT NULL,
-        Tanggal_Deadline DATE NULL,
+        Tanggal_Deadline VARCHAR(255) NULL,
         task_list_id integer NOT  NULL ,
  	 	      FOREIGN KEY(task_list_id) 
           REFERENCES "Task_Lists"(id)

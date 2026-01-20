@@ -12,7 +12,28 @@ class TaskController {
 
       res.status(200).json({
         statusCode: 200,
-        message: tasksData[0],
+        message: tasksData,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getTaskByTaskListId(req, res, next) {
+    try {
+      const { task_list_id } = req.params;
+
+      const query = `
+        SELECT * FROM "Tasks"
+        WHERE task_list_id = $1
+      `;
+
+      const values = [task_list_id];
+      const { rows: tasksData } = await pool.query(query, values);
+
+      res.status(200).json({
+        statusCode: 200,
+        message: tasksData,
       });
     } catch (error) {
       next(error);
@@ -22,25 +43,18 @@ class TaskController {
   static async createNewTask(req, res, next) {
     try {
       const { judul, status, tanggal_deadline } = req.body;
-
-      let statusString = "";
-      if (status === "1") {
-        statusString = "To Do";
-      } else if (status === "2") {
-        statusString = "In Progress";
-      } else {
-        statusString = "Done";
-      }
+      const { task_list_id } = req.params;
 
       const query = `
-            INSERT INTO "Tasks" (judul, status, tanggal_deadline) 
-            VALUES ($1, $2, $3)
-            RETURNING *
-        `;
+      INSERT INTO "Tasks" (judul, status, tanggal_deadline, task_list_id) 
+      VALUES ($1, $2, $3, $4)
+      RETURNING *
+      `;
 
-      const values = [judul, statusString, tanggal_deadline];
+      const values = [judul, status, tanggal_deadline, task_list_id];
 
       const { rows: tasksList } = await pool.query(query, values);
+      console.log(tasksList);
 
       res.status(200).json({
         statusCode: 200,
