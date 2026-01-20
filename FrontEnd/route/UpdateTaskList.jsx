@@ -43,6 +43,7 @@ export default function UpdateTaskList() {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("access_token");
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -52,7 +53,10 @@ export default function UpdateTaskList() {
           },
         );
 
-        setDataForm(response.data.message);
+        setDataForm({
+          nama: response.data.message.nama,
+          deskripsi: response.data.message.deskripsi,
+        });
         setOldData(response.data.message);
       } catch (error) {
         console.log("Gagal mengambil data.");

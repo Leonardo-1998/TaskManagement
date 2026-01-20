@@ -7,7 +7,7 @@ const userRouter = require("./UserRouter");
 const taskRouter = require("./TaskRouter");
 const taskListRouter = require("./TaskListRouter");
 const authentication = require("../middlewares/Authentication");
-const { validateUser } = require("../middlewares/ValidateUser");
+const validateUser = require("../middlewares/ValidateUser");
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));

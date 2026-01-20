@@ -10,6 +10,7 @@ export default function AddTask() {
     status: "To Do",
     tanggal_deadline: "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +36,7 @@ export default function AddTask() {
 
         navigate(`/task_list/${task_list_id}`);
       } catch (error) {
+        setError(error.response.data.message);
         console.log("Gagal mengirimkan data.");
       }
     };
@@ -45,6 +47,11 @@ export default function AddTask() {
   return (
     <>
       <form onSubmit={onSubmit}>
+        {error && (
+          <>
+            <p style={{ color: "red" }}>{error}</p>
+          </>
+        )}
         <table>
           <tbody>
             <tr>

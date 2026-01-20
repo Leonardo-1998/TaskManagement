@@ -33,34 +33,46 @@ export default function Login() {
   return (
     <>
       <h1>Login</h1>
+      {error && (
+        <>
+          <p style={{ color: "red" }}>{error}</p>
+        </>
+      )}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email : </label>
-        <input
-          type="text"
-          name="email"
-          id="email"
-          placeholder="example@mail.com"
-          onChange={handleChange}
-          required
-        />
-        <br />
-
-        {error && (
-          <>
-            <p style={{ color: "red" }}>{error}</p>
-          </>
-        )}
-
-        <label htmlFor="password">Password : </label>
-        <input
-          type="text"
-          name="password"
-          id="password"
-          placeholder="Enter Password"
-          onChange={handleChange}
-          required
-        />
-        <br />
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <label htmlFor="email">Email : </label>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  placeholder="example@mail.com"
+                  onChange={handleChange}
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label htmlFor="password">Password : </label>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="password"
+                  id="password"
+                  placeholder="Enter Password"
+                  onChange={handleChange}
+                  required
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <button type="submit">Login</button>
       </form>
     </>

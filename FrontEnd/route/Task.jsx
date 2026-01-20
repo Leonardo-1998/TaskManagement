@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation, useParams, Link } from "react-router";
+import { useNavigate, useLocation, useParams, Link, data } from "react-router";
 
 export default function Task() {
   const location = useLocation();
@@ -31,6 +31,7 @@ export default function Task() {
 
   const handleSwap = async (dataToSwap) => {
     const token = localStorage.getItem("access_token");
+    console.log(dataToSwap);
     try {
       await axios.put(
         `http://localhost:3000/api/task/${task_list_id}/swap`,
@@ -42,6 +43,7 @@ export default function Task() {
           },
         },
       );
+
       fetchData();
     } catch (error) {
       console.log("Gagal melakukan pertukaran");
@@ -73,6 +75,7 @@ export default function Task() {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
+      setClicked(true);
       fetchData();
     } catch (error) {
       console.log("Gagal menghapus data.");
@@ -121,6 +124,7 @@ export default function Task() {
           },
         );
 
+        setClicked(true);
         fetchData();
       } catch (error) {
         console.log("Gagal mengirimkan data.");

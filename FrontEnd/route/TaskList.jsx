@@ -62,6 +62,7 @@ export default function Home() {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
+      setClicked(true);
       fetchData();
     } catch (error) {
       console.log("Gagal menghapus data.");
@@ -77,6 +78,7 @@ export default function Home() {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
+      setClicked(true);
       fetchData();
     } catch (error) {
       console.log("Gagal menghapus data.");

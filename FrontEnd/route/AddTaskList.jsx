@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router";
 export default function AddTaskList() {
   const navigate = useNavigate();
   const [dataForm, setDataForm] = useState({ nama: "", deskripsi: "" });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,6 +34,7 @@ export default function AddTaskList() {
 
         navigate("/home");
       } catch (error) {
+        setError(error.response.data.message);
         console.log("Gagal mengirimkan data.");
       }
     };
@@ -43,6 +45,11 @@ export default function AddTaskList() {
   return (
     <>
       <form onSubmit={onFormSubmit}>
+        {error && (
+          <>
+            <p style={{ color: "red" }}>{error}</p>
+          </>
+        )}
         <table>
           <tbody>
             <tr>
@@ -55,6 +62,7 @@ export default function AddTaskList() {
                   name="nama"
                   id="nama"
                   onChange={handleChange}
+                  required
                 />
               </td>
             </tr>

@@ -25,6 +25,7 @@ export default function UpdateTask() {
     e.preventDefault();
 
     const token = localStorage.getItem("access_token");
+    console.log(dataForm);
     const updateData = async () => {
       try {
         await axios.put(
@@ -49,6 +50,7 @@ export default function UpdateTask() {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("access_token");
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -58,7 +60,11 @@ export default function UpdateTask() {
           },
         );
 
-        setDataForm(response.data.message);
+        setDataForm({
+          judul: response.data.message.judul,
+          status: response.data.message.status,
+          tanggal_deadline: response.data.message.tanggal_deadline,
+        });
         setOldData(response.data.message);
       } catch (error) {
         console.log("Gagal mengambil data.");
