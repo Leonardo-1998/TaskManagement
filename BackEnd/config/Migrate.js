@@ -39,7 +39,12 @@ const migrate = async () => {
         id SERIAL PRIMARY KEY,
         nama VARCHAR(255) NOT NULL,
         deskripsi VARCHAR(255) NULL,
-        daftar_tugas VARCHAR(255) NULL
+        daftar_tugas VARCHAR(255) NULL,
+        user_id integer NOT  NULL ,
+ 	 	      FOREIGN KEY(user_id) 
+          REFERENCES "Users"(id)
+          ON DELETE CASCADE 
+          ON UPDATE CASCADE
         )
     `;
 
@@ -59,7 +64,12 @@ const migrate = async () => {
         id SERIAL PRIMARY KEY,
         Judul VARCHAR(255) NOT NULL,
         Status VARCHAR(255) NOT NULL,
-        Tanggal_Deadline DATE NULL
+        Tanggal_Deadline DATE NULL,
+        task_list_id integer NOT  NULL ,
+ 	 	      FOREIGN KEY(task_list_id) 
+          REFERENCES "Task_Lists"(id)
+          ON DELETE CASCADE 
+          ON UPDATE CASCADE
         )
     `;
 

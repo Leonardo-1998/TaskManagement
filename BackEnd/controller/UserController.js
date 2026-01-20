@@ -55,7 +55,7 @@ class UserController {
         throw error;
       }
 
-      const payload = { email: data.email };
+      const payload = { id: data.id, email: data.email };
       const accessToken = signToken(payload);
 
       res.status(200).json({
@@ -94,13 +94,6 @@ class UserController {
       const values = [email];
       const { rows: userData } = await pool.query(query, values);
       return userData[0];
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async X(req, res, next) {
-    try {
     } catch (error) {
       next(error);
     }
