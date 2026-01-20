@@ -9,9 +9,9 @@ export default function Task() {
   const { task_list_id } = useParams();
   const [dataTask, setDataTask] = useState([]);
   const [clicked, setClicked] = useState(true);
-  const token = localStorage.getItem("access_token");
 
   const fetchData = async () => {
+    const token = localStorage.getItem("access_token");
     try {
       if (!task_list_id) {
         navigate("/home");
@@ -30,6 +30,7 @@ export default function Task() {
   };
 
   const handleSwap = async (dataToSwap) => {
+    const token = localStorage.getItem("access_token");
     try {
       await axios.put(
         `http://localhost:3000/api/task/${task_list_id}/swap`,
@@ -64,6 +65,7 @@ export default function Task() {
   };
 
   const handleDelete = async (task_id) => {
+    const token = localStorage.getItem("access_token");
     try {
       await axios.delete(
         `http://localhost:3000/api/task/${task_list_id}/delete/${task_id}`,
@@ -104,6 +106,30 @@ export default function Task() {
     updateData();
   };
 
+  const handleSoftDelete = (task_id) => {
+    const token = localStorage.getItem("access_token");
+    const updateData = async () => {
+      try {
+        await axios.put(
+          `http://localhost:3000/api/task/${task_list_id}/soft_delete/${task_id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+
+        fetchData();
+      } catch (error) {
+        console.log("Gagal mengirimkan data.");
+      }
+    };
+
+    updateData();
+  };
+
   useEffect(() => {
     fetchData();
 
@@ -114,6 +140,7 @@ export default function Task() {
 
   return (
     <>
+      <h1>Daftar Tugas</h1>
       <table>
         <thead>
           <tr>
@@ -138,6 +165,9 @@ export default function Task() {
                     <button>Update</button>
                   </Link>
                   <button onClick={() => handleDelete(task.id)}>Delete</button>
+                  <button onClick={() => handleSoftDelete(task.id)}>
+                    Soft Delete
+                  </button>
                 </td>
                 <td>
                   <button

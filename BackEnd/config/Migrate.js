@@ -41,6 +41,7 @@ const migrate = async () => {
         deskripsi VARCHAR(255) NULL,
         daftar_tugas VARCHAR(255) NULL,
         Position integer not NUll,
+        is_deleted boolean NUll,
         user_id integer NOT  NULL ,
  	 	      FOREIGN KEY(user_id) 
           REFERENCES "Users"(id)
@@ -67,6 +68,7 @@ const migrate = async () => {
         Status VARCHAR(255) NOT NULL,
         Tanggal_Deadline VARCHAR(255) NULL,
         Position integer not NUll,
+        is_deleted boolean NUll,
         task_list_id integer NOT  NULL ,
  	 	      FOREIGN KEY(task_list_id) 
           REFERENCES "Task_Lists"(id)

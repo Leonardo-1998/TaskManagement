@@ -7,9 +7,9 @@ export default function Home() {
   const oldData = location.state;
   const [dataTaskList, setDataTaskList] = useState([]);
   const [clicked, setClicked] = useState(true);
-  const token = localStorage.getItem("access_token");
 
   const fetchData = async () => {
+    const token = localStorage.getItem("access_token");
     try {
       const response = await axios.get("http://localhost:3000/api/task_list", {
         headers: { Authorization: `Bearer ${token}` },
@@ -22,6 +22,7 @@ export default function Home() {
   };
 
   const handleSwap = async (dataToSwap) => {
+    const token = localStorage.getItem("access_token");
     try {
       await axios.put(`http://localhost:3000/api/task_list/swap`, dataToSwap, {
         headers: {
@@ -51,7 +52,24 @@ export default function Home() {
     handleSwap(dataToSwap);
   };
 
+  const handleSoftDelete = async (task_list_id) => {
+    const token = localStorage.getItem("access_token");
+    try {
+      await axios.put(
+        `http://localhost:3000/api/task_list/soft_delete/${task_list_id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      fetchData();
+    } catch (error) {
+      console.log("Gagal menghapus data.");
+    }
+  };
+
   const handleDelete = async (task_list_id) => {
+    const token = localStorage.getItem("access_token");
     try {
       await axios.delete(
         `http://localhost:3000/api/task_list/delete/${task_list_id}`,
@@ -101,6 +119,7 @@ export default function Home() {
 
   return (
     <>
+      <h1>Task List</h1>
       <table>
         <thead>
           <tr>
@@ -127,6 +146,9 @@ export default function Home() {
                   </Link>
                   <button onClick={() => handleDelete(taskList.id)}>
                     Delete
+                  </button>
+                  <button onClick={() => handleSoftDelete(taskList.id)}>
+                    Soft Delete
                   </button>
                 </td>
                 <td>

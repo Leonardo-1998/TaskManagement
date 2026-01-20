@@ -18,9 +18,9 @@ export default function AddTask() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("access_token");
 
     const postData = async () => {
-      const token = localStorage.getItem("access_token");
       try {
         await axios.post(
           `http://localhost:3000/api/task/${task_list_id}/create`,

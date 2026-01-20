@@ -7,7 +7,6 @@ export default function UpdateTaskList() {
   const { task_list_id } = useParams();
   const [dataForm, setDataForm] = useState({ nama: "", deskripsi: "" });
   const [oldData, setOldData] = useState({ nama: "", deskripsi: "" });
-  const token = localStorage.getItem("access_token");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,6 +19,7 @@ export default function UpdateTaskList() {
   const onFormSubmit = (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("access_token");
     const updateData = async () => {
       try {
         await axios.put(

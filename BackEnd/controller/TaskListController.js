@@ -7,7 +7,7 @@ class TaskListController {
 
       const query = `
         SELECT * FROM "Task_Lists"
-        WHERE user_id = $1
+        WHERE user_id = $1 AND is_deleted = false
         ORDER BY position
       `;
 
@@ -35,8 +35,8 @@ class TaskListController {
       }
 
       const query = `
-            INSERT INTO "Task_Lists" (nama, deskripsi, position, user_id) 
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO "Task_Lists" (nama, deskripsi, position, is_deleted, user_id) 
+            VALUES ($1, $2, $3, false, $4)
             RETURNING *
         `;
       const values = [nama, deskripsi, position, id];
@@ -168,6 +168,39 @@ class TaskListController {
         message: deletedTaskList[0],
       });
     } catch (error) {
+      next(error);
+    }
+  }
+
+  static async softDeleteTaskList(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const search = TaskListController.getOneById(id);
+      if (!search) {
+        const error = new Error("Tidak ada data yang diupdate.");
+        error.statusCode = 400;
+        throw error;
+      }
+
+      const query = `
+            UPDATE "Task_Lists"
+              SET is_deleted = true
+            WHERE id = $1
+            RETURNING *
+            ;
+        `;
+
+      const values = [id];
+
+      const { rows: tasksList } = await pool.query(query, values);
+
+      res.status(200).json({
+        statusCode: 200,
+        message: tasksList[0],
+      });
+    } catch (error) {
+      console.log(error);
       next(error);
     }
   }

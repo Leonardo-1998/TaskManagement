@@ -15,7 +15,6 @@ export default function UpdateTask() {
     status: "To Do",
     tanggal_deadline: "",
   });
-  const token = localStorage.getItem("access_token");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +24,7 @@ export default function UpdateTask() {
   const onSubmit = (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("access_token");
     const updateData = async () => {
       try {
         await axios.put(
