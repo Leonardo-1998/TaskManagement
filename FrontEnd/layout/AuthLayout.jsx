@@ -19,9 +19,14 @@ export default function AuthLayout() {
 
   return (
     <>
-      <Button variant="destructive" onClick={logout}>
-        Logout
-      </Button>
+      <nav className="bg-white shadow-md">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <h1 className="text-xl font-bold">Task Management</h1>
+          <Button variant="destructive" onClick={logout}>
+            Logout
+          </Button>
+        </div>
+      </nav>
 
       <Outlet />
     </>

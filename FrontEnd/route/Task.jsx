@@ -36,7 +36,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { MoreHorizontalIcon, MoveUp, MoveDown } from "lucide-react";
 
 export default function Task() {
@@ -220,179 +219,189 @@ export default function Task() {
 
   return (
     <>
-      <h1>Tugas</h1>
-      {error && (
-        <>
-          <p style={{ color: "red" }}>{error}</p>
-        </>
-      )}
+      <div className="flex flex-col items-center gap-6 pt-[5vh]">
+        <Card size="sm" className="mx-auto w-full max-w-sm">
+          <CardHeader>
+            <CardTitle>Invite Collaborator</CardTitle>
+            <CardDescription>
+              Invite other user to edit this task list by email
+            </CardDescription>
+          </CardHeader>
+          {!addCollaborator && (
+            <>
+              <CardFooter>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={handleAdd}
+                >
+                  Invite Collaborator
+                </Button>
+              </CardFooter>
+            </>
+          )}
 
-      <Card size="sm" className="mx-auto w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Invite Collaborator</CardTitle>
-          <CardDescription>
-            Invite other user to edit this task list by email
-          </CardDescription>
-        </CardHeader>
-        {!addCollaborator && (
-          <>
-            <CardFooter>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full"
-                onClick={handleAdd}
-              >
-                Invite Collaborator
-              </Button>
-            </CardFooter>
-          </>
-        )}
+          {addCollaborator && (
+            <>
+              <CardContent>
+                <Select
+                  name="email"
+                  id="email"
+                  onValueChange={(value) =>
+                    setDataForm({ ...dataForm, email: value })
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select an email" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Email</SelectLabel>
+                      {userList.map((user) => {
+                        return (
+                          <SelectItem value={user.email} key={user.id}>
+                            {user.email}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-1/2"
+                  onClick={handleInvite}
+                >
+                  Invite
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-1/2"
+                  onClick={handleAdd}
+                >
+                  Cancel
+                </Button>
+              </CardFooter>
+            </>
+          )}
+        </Card>
 
-        {addCollaborator && (
-          <>
-            <CardContent>
-              <Select
-                name="email"
-                id="email"
-                onValueChange={(value) =>
-                  setDataForm({ ...dataForm, email: value })
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select an email" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Email</SelectLabel>
-                    {userList.map((user) => {
-                      return (
-                        <SelectItem value={user.email} key={user.id}>
-                          {user.email}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </CardContent>
-            <CardFooter>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-1/2"
-                onClick={handleInvite}
-              >
-                Invite
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-1/2"
-                onClick={handleAdd}
-              >
-                Cancel
-              </Button>
-            </CardFooter>
-          </>
-        )}
-      </Card>
-      <br />
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>No.</TableHead>
-            <TableHead>Judul</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Tanggal Deadline</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-            <TableHead>Placement</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {dataTask.map((task, index) => {
-            return (
-              <TableRow key={task.id}>
-                <TableCell className="font-medium">{index + 1}</TableCell>
-                <TableCell>{task.judul}</TableCell>
-                <TableCell>{task.status}</TableCell>
-                <TableCell>{task.tanggal_deadline}</TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="size-8">
-                        <MoreHorizontalIcon />
-                        <span className="sr-only">Open menu</span>
+        <Card className="w-[70%] mx-auto">
+          <CardHeader>
+            <CardTitle className="text-2xl flex justify-center">Task</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table className={"table-auto"}>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-base w-16">No.</TableHead>
+                  <TableHead className="text-base">Judul</TableHead>
+                  <TableHead className="text-base w-32">Status</TableHead>
+                  <TableHead className="text-base w-40">
+                    Tanggal Deadline
+                  </TableHead>
+                  <TableHead className="text-right text-base w-24">
+                    Actions
+                  </TableHead>
+                  <TableHead className="text-base w-32">Placement</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {dataTask.map((task, index) => {
+                  return (
+                    <TableRow key={task.id}>
+                      <TableCell className="font-medium">{index + 1}</TableCell>
+                      <TableCell>{task.judul}</TableCell>
+                      <TableCell>{task.status}</TableCell>
+                      <TableCell>{task.tanggal_deadline}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="size-8"
+                            >
+                              <MoreHorizontalIcon />
+                              <span className="sr-only">Open menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem asChild>
+                              <Link
+                                to={`/task_list/${task_list_id}/update/${task.id}`}
+                              >
+                                Update
+                              </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              variant="destructive"
+                              onClick={() => handleDelete(task.id)}
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              variant="destructive"
+                              onClick={() => handleSoftDelete(task.id)}
+                            >
+                              Soft Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={index === 0}
+                            onClick={() => handleSwapUp(index)}
+                          >
+                            <MoveUp />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={index === dataTask.length - 1}
+                            onClick={() => handleSwapDown(index)}
+                          >
+                            <MoveDown />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={6}>
+                    <div className="flex gap-4">
+                      <Button asChild>
+                        <Link to="/home">Back to Task List</Link>
                       </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem asChild>
-                        <Link
-                          to={`/task_list/${task_list_id}/update/${task.id}`}
-                        >
-                          Update
+                      <Button asChild>
+                        <Link to={`/task_list/${task_list_id}/create_task`}>
+                          Add Task
                         </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        variant="destructive"
-                        onClick={() => handleDelete(task.id)}
-                      >
-                        Delete
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        variant="destructive"
-                        onClick={() => handleSoftDelete(task.id)}
-                      >
-                        Soft Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={index === 0}
-                      onClick={() => handleSwapUp(index)}
-                    >
-                      <MoveUp />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={index === dataTask.length - 1}
-                      onClick={() => handleSwapDown(index)}
-                    >
-                      <MoveDown />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={6}>
-              <div className="flex gap-4">
-                <Button asChild>
-                  <Link to="/home">Back to Task List</Link>
-                </Button>
-                <Button asChild>
-                  <Link to={`/task_list/${task_list_id}/create_task`}>
-                    Add Task
-                  </Link>
-                </Button>
-                <Button onClick={handleUndo} disabled={clicked}>
-                  Undo
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
+                      </Button>
+                      <Button onClick={handleUndo} disabled={clicked}>
+                        Undo
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
     </>
   );
 }

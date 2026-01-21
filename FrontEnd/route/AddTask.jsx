@@ -65,7 +65,7 @@ export default function AddTask() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex min-h-[calc(100vh-60px)] items-center justify-center">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Add New Task</CardTitle>
