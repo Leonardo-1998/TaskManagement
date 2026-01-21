@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -155,6 +156,7 @@ export default function Home() {
 
   return (
     <>
+      <h1>Task List</h1>
       <Table>
         <TableHeader>
           <TableRow>

@@ -1,6 +1,43 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation, useParams, Link, data } from "react-router";
+import { useNavigate, useLocation, useParams, Link } from "react-router";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableFooter,
+} from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { MoreHorizontalIcon, MoveUp, MoveDown } from "lucide-react";
 
 export default function Task() {
   const location = useLocation();
@@ -167,11 +204,6 @@ export default function Task() {
     setAddCollaborator(!addCollaborator);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setDataForm({ ...dataForm, [name]: value });
-  };
-
   useEffect(() => {
     fetchData();
 
@@ -189,98 +221,172 @@ export default function Task() {
           <p style={{ color: "red" }}>{error}</p>
         </>
       )}
-      {!addCollaborator && (
-        <>
-          <button onClick={handleAdd}>Invite Collaborator</button>
-        </>
-      )}
-      {addCollaborator && (
-        <>
-          <table>
-            <tbody>
-              <tr>
-                <td colSpan={2}>
-                  <select name="email" id="email" onChange={handleChange}>
-                    <option value=""></option>
+
+      <Card size="sm" className="mx-auto w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Invite Collaborator</CardTitle>
+          <CardDescription>
+            Invite other user to edit this task list by email
+          </CardDescription>
+        </CardHeader>
+        {!addCollaborator && (
+          <>
+            <CardFooter>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={handleAdd}
+              >
+                Invite Collaborator
+              </Button>
+            </CardFooter>
+          </>
+        )}
+
+        {addCollaborator && (
+          <>
+            <CardContent>
+              <Select
+                name="email"
+                id="email"
+                onValueChange={(value) =>
+                  setDataForm({ ...dataForm, email: value })
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select an email" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Email</SelectLabel>
                     {userList.map((user) => {
                       return (
-                        <option value={user.email} key={user.id}>
+                        <SelectItem value={user.email} key={user.id}>
                           {user.email}
-                        </option>
+                        </SelectItem>
                       );
                     })}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <button onClick={handleInvite}>Invite</button>
-                </td>
-                <td>
-                  <button onClick={handleAdd}>Cancel</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </>
-      )}
-
-      <table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Judul</th>
-            <th>Status</th>
-            <th>Tanggal Deadline</th>
-            <th>Action</th>
-            <th>Placement</th>
-          </tr>
-        </thead>
-        <tbody>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </CardContent>
+            <CardFooter>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-1/2"
+                onClick={handleInvite}
+              >
+                Invite
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-1/2"
+                onClick={handleAdd}
+              >
+                Cancel
+              </Button>
+            </CardFooter>
+          </>
+        )}
+      </Card>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>No.</TableHead>
+            <TableHead>Judul</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Tanggal Deadline</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>Placement</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {dataTask.map((task, index) => {
             return (
-              <tr key={task.id}>
-                <td>{index + 1}</td>
-                <td>{task.judul}</td>
-                <td>{task.status}</td>
-                <td>{task.tanggal_deadline}</td>
-                <td>
-                  <Link to={`/task_list/${task_list_id}/update/${task.id}`}>
-                    <button>Update</button>
-                  </Link>
-                  <button onClick={() => handleDelete(task.id)}>Delete</button>
-                  <button onClick={() => handleSoftDelete(task.id)}>
-                    Soft Delete
-                  </button>
-                </td>
-                <td>
-                  <button
-                    disabled={index === 0 ? true : false}
-                    onClick={() => handleSwapUp(index)}
-                  >
-                    ^
-                  </button>
-                  <button
-                    disabled={index === dataTask.length - 1 ? true : false}
-                    onClick={() => handleSwapDown(index)}
-                  >
-                    v
-                  </button>
-                </td>
-              </tr>
+              <TableRow key={task.id}>
+                <TableCell className="font-medium">{index + 1}</TableCell>
+                <TableCell>{task.judul}</TableCell>
+                <TableCell>{task.status}</TableCell>
+                <TableCell>{task.tanggal_deadline}</TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="size-8">
+                        <MoreHorizontalIcon />
+                        <span className="sr-only">Open menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link
+                          to={`/task_list/${task_list_id}/update/${task.id}`}
+                        >
+                          Update
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onClick={() => handleDelete(task.id)}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onClick={() => handleSoftDelete(task.id)}
+                      >
+                        Soft Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === 0}
+                      onClick={() => handleSwapUp(index)}
+                    >
+                      <MoveUp />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === dataTaskList.length - 1}
+                      onClick={() => handleSwapDown(index)}
+                    >
+                      <MoveDown />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
             );
           })}
-        </tbody>
-      </table>
-      <Link to="/home">
-        <button>Back to Task List</button>
-      </Link>
-      <Link to={`/task_list/${task_list_id}/create_task`}>
-        <button>Add Task</button>
-      </Link>
-      <button onClick={handleUndo} disabled={clicked}>
-        Undo
-      </button>
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={6}>
+              <div className="flex gap-4">
+                <Button asChild>
+                  <Link to="/home">Back to Task List</Link>
+                </Button>
+                <Button asChild>
+                  <Link to={`/task_list/${task_list_id}/create_task`}>
+                    Add Task
+                  </Link>
+                </Button>
+                <Button onClick={handleUndo} disabled={clicked}>
+                  Undo
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
     </>
   );
 }
