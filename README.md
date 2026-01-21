@@ -4,8 +4,8 @@ A full-stack task management application featuring dynamic reordering (swap), so
 
 ## 🚀 Tech Stack
 
-- **Frontend:** React.js, Axios, React Router v7
-- **Backend:** JavaScript (Node.js), Express.js, JWT Authentication, Bcryptjs, Joi,
+- **Frontend:** React.js, Axios, React Router v7, Tailwind CSS 4, Radix UI, Lucide React, Vite 7
+- **Backend:** JavaScript (Node.js), Express.js, JWT Authentication, Bcryptjs, Joi
 - **Database:** PostgreSQL
 
 ## 🛠️ Key Features
@@ -23,6 +23,7 @@ The database consists of three main tables:
 1. **Users**: Stores credentials (email, hashed password).
 2. **Task_Lists**: Groups of tasks belonging to a specific user.
 3. **Tasks**: Groups of items with title, status, and tanggal_deadline belongin to a specific task list.
+4. **Collaborators**: Groups of items with task_list_id, and user_id.
 
 ## 📡 API Endpoints
 
