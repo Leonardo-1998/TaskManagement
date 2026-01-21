@@ -2,6 +2,27 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
 export default function UpdateTask() {
   const navigate = useNavigate();
   const { task_list_id, task_id } = useParams();
@@ -77,66 +98,79 @@ export default function UpdateTask() {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                <label htmlFor="judul">Judul :</label>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="judul"
-                  id="judul"
-                  onChange={handleChange}
-                  value={dataForm.judul}
-                  required
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label htmlFor="status">Status :</label>
-              </td>
-              <td>
-                <select
-                  name="status"
-                  id="status"
-                  onChange={handleChange}
-                  value={dataForm.status}
-                >
-                  <option value="To Do">To Do</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Done">Done</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label htmlFor="tanggal_deadline">Tanggal Deadline :</label>
-              </td>
-              <td>
-                <input
-                  type="date"
-                  name="tanggal_deadline"
-                  id="tanggal_deadline"
-                  onChange={handleChange}
-                  value={dataForm.tanggal_deadline}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <button type="submit">Update Task</button>
-                <Link to={`/task_list/${task_list_id}`}>
-                  <button>Cancel</button>
-                </Link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
+      <div className="flex min-h-screen items-center justify-center">
+        <Card className="w-full max-w-sm">
+          <CardHeader>
+            <CardTitle>Update Task</CardTitle>
+            <CardDescription>
+              Update a new task for your task list
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={onSubmit}>
+              <div className="flex flex-col gap-6">
+                <div className="grid gap-2">
+                  <Label htmlFor="judul">Judul</Label>
+                  <Input
+                    type="text"
+                    name="judul"
+                    id="judul"
+                    onChange={handleChange}
+                    value={dataForm.judul}
+                    placeholder="Enter a title"
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <div className="flex items-center">
+                    <Label htmlFor="password">Status</Label>
+                  </div>
+                  <Select
+                    name="status"
+                    value={dataForm.status}
+                    onValueChange={(value) =>
+                      setDataForm({ ...dataForm, status: value })
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Status</SelectLabel>
+                        <SelectItem value="To Do">To Do</SelectItem>
+                        <SelectItem value="In Progress">In Progress</SelectItem>
+                        <SelectItem value="Done">Done</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="tanggal_deadline">Tanggal Deadline</Label>
+                  <Input
+                    id="tanggal_deadline"
+                    name="tanggal_deadline"
+                    type="date"
+                    onChange={handleChange}
+                    value={dataForm.tanggal_deadline}
+                  />
+                </div>
+                <Button type="submit" className="w-full">
+                  Update Task
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+
+          <CardFooter className="flex-col gap-2">
+            <Button className="w-full" asChild>
+              <Link to={`/task_list/${task_list_id}`}>
+                <button>Cancel</button>
+              </Link>
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
     </>
   );
 }

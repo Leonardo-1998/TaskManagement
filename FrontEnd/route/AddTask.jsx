@@ -1,6 +1,26 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function AddTask() {
   const navigate = useNavigate();
@@ -45,70 +65,79 @@ export default function AddTask() {
   };
 
   return (
-    <>
-      <form onSubmit={onSubmit}>
-        {error && (
-          <>
-            <p style={{ color: "red" }}>{error}</p>
-          </>
-        )}
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                <label htmlFor="judul">Judul :</label>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="judul"
+    <div className="flex min-h-screen items-center justify-center">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Add New Task</CardTitle>
+          <CardDescription>
+            Create a new task for your task list
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+          <form onSubmit={onSubmit}>
+            <div className="flex flex-col gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="judul">Judul</Label>
+                <Input
                   id="judul"
+                  name="judul"
+                  type="text"
+                  placeholder="Enter task title"
                   onChange={handleChange}
+                  value={dataForm.judul}
                   required
                 />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label htmlFor="status">Status :</label>
-              </td>
-              <td>
-                <select
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="status">Status</Label>
+                <Select
                   name="status"
-                  id="status"
-                  onChange={handleChange}
                   value={dataForm.status}
+                  onValueChange={(value) =>
+                    setDataForm({ ...dataForm, status: value })
+                  }
                 >
-                  <option value="To Do">To Do</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Done">Done</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label htmlFor="tanggal_deadline">Tanggal Deadline :</label>
-              </td>
-              <td>
-                <input
-                  type="date"
-                  name="tanggal_deadline"
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Status</SelectLabel>
+                      <SelectItem value="To Do">To Do</SelectItem>
+                      <SelectItem value="In Progress">In Progress</SelectItem>
+                      <SelectItem value="Done">Done</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="tanggal_deadline">Tanggal Deadline</Label>
+                <Input
                   id="tanggal_deadline"
+                  name="tanggal_deadline"
+                  type="date"
                   onChange={handleChange}
+                  value={dataForm.tanggal_deadline}
                 />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <button type="submit">Add Task</button>
-                <Link to={`/task_list/${task_list_id}`}>
-                  <button>Cancel</button>
-                </Link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
-    </>
+              </div>
+              <div className="flex gap-2">
+                <Button type="submit" className="w-1/2">
+                  Add Task
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-1/2"
+                  asChild
+                >
+                  <Link to={`/task_list/${task_list_id}`}>Cancel</Link>
+                </Button>
+              </div>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

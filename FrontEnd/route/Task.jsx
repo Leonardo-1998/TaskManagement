@@ -131,11 +131,16 @@ export default function Task() {
   const handleUndo = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("access_token");
     const updateData = async () => {
       try {
         await axios.put(
           `http://localhost:3000/api/task/${task_list_id}/update/${oldData.id}`,
-          oldData,
+          {
+            judul: oldData.judul,
+            status: oldData.status,
+            tanggal_deadline: oldData.tanggal_deadline,
+          },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -292,6 +297,7 @@ export default function Task() {
           </>
         )}
       </Card>
+      <br />
       <Table>
         <TableHeader>
           <TableRow>
@@ -356,7 +362,7 @@ export default function Task() {
                     <Button
                       variant="outline"
                       size="sm"
-                      disabled={index === dataTaskList.length - 1}
+                      disabled={index === dataTask.length - 1}
                       onClick={() => handleSwapDown(index)}
                     >
                       <MoveDown />
