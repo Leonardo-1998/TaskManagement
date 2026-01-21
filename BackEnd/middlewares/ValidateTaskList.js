@@ -22,30 +22,20 @@ const validateDataTaskList = (req, res, next) => {
 const validateSwapData = (req, res, next) => {
   const schema = Joi.object({
     lowerData: Joi.object({
-      daftar_tugas: Joi.string().optional().allow(null, ""),
-      deskripsi: Joi.string().optional().allow(""),
       id: Joi.number().required().messages({
         "number.required": "Id harus ada.",
       }),
-      is_deleted: Joi.boolean().optional(),
-      nama: Joi.string().optional(),
       position: Joi.number().required().messages({
         "number.required": "Position harus ada.",
       }),
-      user_id: Joi.number().optional(),
     }),
     upperData: Joi.object({
-      daftar_tugas: Joi.string().optional().allow(null, ""),
-      deskripsi: Joi.string().optional().allow(""),
       id: Joi.number().required().messages({
         "number.required": "Id harus ada.",
       }),
-      is_deleted: Joi.boolean().optional(),
-      nama: Joi.string().optional(),
       position: Joi.number().required().messages({
         "number.required": "Position harus ada.",
       }),
-      user_id: Joi.number().optional(),
     }),
   });
 

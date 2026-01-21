@@ -1,6 +1,24 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableFooter,
+} from "@/components/ui/table";
+import { MoreHorizontalIcon, MoveUp, MoveDown } from "lucide-react";
 
 export default function Home() {
   const location = useLocation();
@@ -31,24 +49,37 @@ export default function Home() {
           "Content-Type": "application/json",
         },
       });
-      fetchData();
+      await fetchData();
     } catch (error) {
       console.log("Gagal melakukan pertukaran");
+      console.log(error);
     }
   };
 
   const handleSwapUp = (index) => {
     const dataToSwap = {
-      upperData: dataTaskList[index - 1],
-      lowerData: dataTaskList[index],
+      upperData: {
+        id: dataTaskList[index - 1].id,
+        position: dataTaskList[index - 1].id,
+      },
+      lowerData: {
+        id: dataTaskList[index].id,
+        position: dataTaskList[index].id,
+      },
     };
     handleSwap(dataToSwap);
   };
 
   const handleSwapDown = (index) => {
     const dataToSwap = {
-      upperData: dataTaskList[index],
-      lowerData: dataTaskList[index + 1],
+      upperData: {
+        id: dataTaskList[index].id,
+        position: dataTaskList[index].id,
+      },
+      lowerData: {
+        id: dataTaskList[index + 1].id,
+        position: dataTaskList[index + 1].id,
+      },
     };
     handleSwap(dataToSwap);
   };
@@ -91,9 +122,10 @@ export default function Home() {
 
     const updateData = async () => {
       try {
+        const token = localStorage.getItem("access_token");
         await axios.put(
           `http://localhost:3000/api/task_list/update/${oldData.id}`,
-          oldData,
+          { nama: oldData.nama, deskripsi: oldData.deskripsi },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -105,6 +137,7 @@ export default function Home() {
         fetchData();
         setClicked(true);
       } catch (error) {
+        console.log(error);
         console.log("Gagal mengirimkan data.");
       }
     };
@@ -122,63 +155,95 @@ export default function Home() {
 
   return (
     <>
-      <h1>Task List</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Nama</th>
-            <th>Deskripsi</th>
-            <th>Action</th>
-            <th>Placement</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>No.</TableHead>
+            <TableHead>Nama</TableHead>
+            <TableHead>Deskripsi</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>Placement</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {dataTaskList.map((taskList, index) => {
             return (
-              <tr key={taskList.id}>
-                <td>{index + 1}</td>
-                <td>{taskList.nama}</td>
-                <td>{taskList.deskripsi}</td>
-                <td>
-                  <Link to={`/task_list/${taskList.id}`}>
-                    <button>Details</button>
-                  </Link>
-                  <Link to={`/task_list/${taskList.id}/update`}>
-                    <button>Update</button>
-                  </Link>
-                  <button onClick={() => handleDelete(taskList.id)}>
-                    Delete
-                  </button>
-                  <button onClick={() => handleSoftDelete(taskList.id)}>
-                    Soft Delete
-                  </button>
-                </td>
-                <td>
-                  <button
-                    disabled={index === 0 ? true : false}
-                    onClick={() => handleSwapUp(index)}
-                  >
-                    ^
-                  </button>
-                  <button
-                    disabled={index === dataTaskList.length - 1 ? true : false}
-                    onClick={() => handleSwapDown(index)}
-                  >
-                    v
-                  </button>
-                </td>
-              </tr>
+              <TableRow key={taskList.id}>
+                <TableCell className="font-medium">{index + 1}</TableCell>
+                <TableCell>{taskList.nama}</TableCell>
+                <TableCell>{taskList.deskripsi}</TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="size-8">
+                        <MoreHorizontalIcon />
+                        <span className="sr-only">Open menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link to={`/task_list/${taskList.id}`}>Details</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to={`/task_list/${taskList.id}/update`}>
+                          Update
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onClick={() => handleDelete(taskList.id)}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onClick={() => handleSoftDelete(taskList.id)}
+                      >
+                        Soft Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === 0}
+                      onClick={() => handleSwapUp(index)}
+                    >
+                      <MoveUp />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={index === dataTaskList.length - 1}
+                      onClick={() => handleSwapDown(index)}
+                    >
+                      <MoveDown />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
             );
           })}
-        </tbody>
-      </table>
-      <Link to={"/add_task_list"}>
-        <button>Add Task List</button>
-      </Link>
-      <button onClick={handleUndo} disabled={clicked}>
-        Undo
-      </button>
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={5}>
+              <div className="flex gap-4">
+                <Button asChild>
+                  <Link to={"/add_task_list"}>Add Task List</Link>
+                </Button>
+                <Button onClick={handleUndo} disabled={clicked}>
+                  Undo
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
     </>
   );
 }

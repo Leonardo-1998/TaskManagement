@@ -26,27 +26,11 @@ const validateSwapData = (req, res, next) => {
   const schema = Joi.object({
     lowerData: Joi.object({
       id: Joi.number().required(),
-      is_deleted: Joi.boolean().optional(),
-      judul: Joi.string().min(3).optional().messages({
-        "string.required": "Judul harus diisi",
-        "string.required": "Judul minimal 3 karakter",
-      }),
       position: Joi.number().required(),
-      status: Joi.string().optional(),
-      tanggal_deadline: Joi.string().optional().allow(""),
-      task_list_id: Joi.number().optional(),
     }),
     upperData: Joi.object({
       id: Joi.number().required(),
-      is_deleted: Joi.boolean().optional(),
-      judul: Joi.string().min(3).optional().messages({
-        "string.required": "Judul harus diisi",
-        "string.required": "Judul minimal 3 karakter",
-      }),
       position: Joi.number().required(),
-      status: Joi.string().optional(),
-      tanggal_deadline: Joi.string().optional().allow(""),
-      task_list_id: Joi.number().optional(),
     }),
   });
 

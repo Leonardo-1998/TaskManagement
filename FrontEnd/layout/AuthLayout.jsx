@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useNavigate, Outlet } from "react-router";
+import { useNavigate, Outlet, Link } from "react-router";
+import { Button } from "@/components/ui/button";
 
 export default function AuthLayout() {
   const navigate = useNavigate();
@@ -18,9 +19,10 @@ export default function AuthLayout() {
 
   return (
     <>
-      <nav>
-        <button onClick={logout}>Logout</button>
-      </nav>
+      <Button variant="destructive" onClick={logout}>
+        Logout
+      </Button>
+
       <Outlet />
     </>
   );

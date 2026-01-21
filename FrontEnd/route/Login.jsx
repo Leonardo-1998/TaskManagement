@@ -1,12 +1,22 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function Login() {
   const navigate = useNavigate();
   const [dataForm, setDataForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const [hidden, setHidden] = useState(true);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,50 +42,58 @@ export default function Login() {
   };
 
   return (
-    <>
-      <h1>Login</h1>
-      {error && (
-        <>
-          <p style={{ color: "red" }}>{error}</p>
-        </>
-      )}
-      <form onSubmit={handleSubmit}>
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                <label htmlFor="email">Email : </label>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="email"
+    <div className="flex min-h-screen items-center justify-center">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Login to your account</CardTitle>
+          <CardDescription>
+            Enter your email and password to login
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+          <form onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
                   id="email"
+                  name="email"
+                  type="email"
                   placeholder="example@mail.com"
                   onChange={handleChange}
+                  value={dataForm.email}
                   required
                 />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label htmlFor="password">Password : </label>
-              </td>
-              <td>
-                <input
-                  type={hidden ? "password" : "text"}
-                  name="password"
+              </div>
+              <div className="grid gap-2">
+                <Input
                   id="password"
+                  name="password"
+                  type="password"
                   placeholder="Enter Password"
                   onChange={handleChange}
+                  value={dataForm.password}
                   required
                 />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button type="submit">Login</button>
-      </form>
-    </>
+              </div>
+              <Button type="submit" className="w-full">
+                Login
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter className="flex flex-col gap-2">
+          <div className="text-center text-sm">
+            Don't have an account?{" "}
+            <Link to="/register">
+              <Button variant="link" className="p-0">
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

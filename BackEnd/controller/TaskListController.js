@@ -9,13 +9,12 @@ class TaskListController {
         SELECT t.id, t.nama, t.deskripsi, t.position, t.is_deleted, t.user_id FROM "Task_Lists" t
           LEFT JOIN "Collaborators" c ON  c.task_list_id = t.id
         WHERE (t.user_id = $1 OR c.user_id =$1) AND is_deleted = false
-        ORDER BY t.id
+        ORDER BY t.position
        ;
       `;
 
       const values = [id];
       const { rows: tasksListData } = await pool.query(query, values);
-      console.log(tasksListData);
 
       res.status(200).json({
         statusCode: 200,
@@ -54,44 +53,41 @@ class TaskListController {
     }
   }
 
+  // masih harus di betulkan
   static async swapTaskList(req, res, next) {
     try {
       const { upperData, lowerData } = req.body;
+      console.log(upperData);
+      console.log(lowerData);
 
       const searchUpperData = await TaskListController.getOneById(upperData.id);
       const searchLowerData = await TaskListController.getOneById(lowerData.id);
-      if (!searchUpperData && searchLowerData) {
+      if (!searchUpperData || !searchLowerData) {
         const error = new Error("Tidak ada data yang diupdate.");
         error.statusCode = 400;
         throw error;
       }
 
-      const query = `
-            UPDATE "Task_Lists"
-            SET position = CASE
-              WHEN id = $1 THEN $2::integer
-              WHEN id = $3 THEN $4::integer
-            END
-            WHERE id IN ($1, $3)
-            RETURNING *
-            ;
-        `;
+      await pool.query("BEGIN");
 
-      const values = [
-        upperData.id,
-        parseInt(lowerData.position),
+      await pool.query(`UPDATE "Task_Lists" SET position = $1 WHERE id = $2`, [
+        upperData.position,
         lowerData.id,
-        parseInt(upperData.position),
-      ];
+      ]);
 
-      const { rows: dataTasks } = await pool.query(query, values);
+      await pool.query(`UPDATE "Task_Lists" SET position = $1 WHERE id = $2`, [
+        lowerData.position,
+        upperData.id,
+      ]);
+
+      await pool.query("COMMIT");
+      console.log("=====================");
 
       res.status(200).json({
         statusCode: 200,
-        message: dataTasks[0],
+        message: "Berhasil menukar data",
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -116,7 +112,7 @@ class TaskListController {
       const { nama, deskripsi } = req.body;
       const { id } = req.params;
 
-      const search = TaskListController.getOneById(id);
+      const search = await TaskListController.getOneById(id);
       if (!search) {
         const error = new Error("Tidak ada data yang diupdate.");
         error.statusCode = 400;
@@ -150,7 +146,6 @@ class TaskListController {
       const { id } = req.params;
 
       const search = await TaskListController.getOneById(id);
-      console.log(search);
       if (!search) {
         const error = new Error("Tidak ada data yang didelete.");
         error.statusCode = 400;
@@ -179,7 +174,7 @@ class TaskListController {
     try {
       const { id } = req.params;
 
-      const search = TaskListController.getOneById(id);
+      const search = await TaskListController.getOneById(id);
       if (!search) {
         const error = new Error("Tidak ada data yang diupdate.");
         error.statusCode = 400;
@@ -203,7 +198,6 @@ class TaskListController {
         message: tasksList[0],
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

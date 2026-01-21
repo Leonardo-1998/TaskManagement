@@ -13,15 +13,6 @@ export default function LoginCheck() {
 
   return (
     <>
-      <nav>
-        <div>
-          <Link to="/register">Register</Link>
-        </div>
-        |
-        <div>
-          <Link to="/login">Login</Link>
-        </div>
-      </nav>
       <Outlet />
     </>
   );
