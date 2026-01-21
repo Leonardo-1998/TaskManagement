@@ -16,6 +16,7 @@ export default function Home() {
       });
 
       setDataTaskList(response.data.message);
+      console.log(response.data.message);
     } catch (error) {
       console.log("Gagal mengambil data.");
     }

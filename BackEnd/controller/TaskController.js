@@ -50,6 +50,7 @@ class TaskController {
         message: tasksList[0],
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

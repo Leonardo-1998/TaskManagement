@@ -7,7 +7,7 @@ const pool = new Pool({
   host: "localhost",
   port: 5432,
   database: "TaskManagementDB",
-  idleTimeoutMillis: 1000,
+  idleTimeoutMillis: 100,
 });
 
 module.exports = pool;

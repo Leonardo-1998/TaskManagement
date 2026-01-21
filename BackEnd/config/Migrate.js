@@ -39,7 +39,6 @@ const migrate = async () => {
         id SERIAL PRIMARY KEY,
         nama VARCHAR(255) NOT NULL,
         deskripsi VARCHAR(255) NULL,
-        daftar_tugas VARCHAR(255) NULL,
         Position integer not NUll,
         is_deleted boolean NUll,
         user_id integer NOT  NULL ,
@@ -89,8 +88,16 @@ const migrate = async () => {
     const queryCreateTableCollaborators = `
         CREATE TABLE IF NOT EXISTS "Collaborators" (
         id SERIAL PRIMARY KEY,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL
+        task_list_id integer NOT  NULL ,
+ 	 	      FOREIGN KEY(task_list_id) 
+          REFERENCES "Task_Lists"(id)
+          ON DELETE CASCADE 
+          ON UPDATE CASCADE,
+        user_id integer NOT  NULL ,
+ 	 	      FOREIGN KEY(user_id) 
+          REFERENCES "Users"(id)
+          ON DELETE CASCADE 
+          ON UPDATE CASCADE
         )
     `;
 

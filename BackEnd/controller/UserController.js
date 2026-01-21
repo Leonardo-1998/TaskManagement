@@ -3,6 +3,23 @@ const { hashPassword, comparePassword } = require("../utils/Bcryptjs");
 const { signToken } = require("../utils/JWT");
 
 class UserController {
+  static async getAllUser(req, res, next) {
+    try {
+      const query = `
+            SELECT email, id FROM "Users"
+        `;
+
+      const { rows: userData } = await pool.query(query);
+      res.status(200).json({
+        statusCode: 200,
+        message: userData,
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
   static async registerUser(req, res, next) {
     try {
       const { email, password } = req.body;

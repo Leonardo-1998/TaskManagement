@@ -6,6 +6,7 @@ export default function Register() {
   const navigate = useNavigate();
   const [dataForm, setDataForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [hidden, setHidden] = useState(true);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +65,7 @@ export default function Register() {
               </td>
               <td>
                 <input
-                  type="text"
+                  type={hidden ? "password" : "text"}
                   name="password"
                   id="password"
                   placeholder="Enter Password"

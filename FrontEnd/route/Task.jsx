@@ -7,8 +7,12 @@ export default function Task() {
   const oldData = location.state;
   const navigate = useNavigate();
   const { task_list_id } = useParams();
+  const [userList, setUserList] = useState([]);
   const [dataTask, setDataTask] = useState([]);
   const [clicked, setClicked] = useState(true);
+  const [addCollaborator, setAddCollaborator] = useState(false);
+  const [dataForm, setDataForm] = useState({ task_list_id: "", email: "" });
+  const [error, setError] = useState("");
 
   const fetchData = async () => {
     const token = localStorage.getItem("access_token");
@@ -21,9 +25,13 @@ export default function Task() {
         `http://localhost:3000/api/task/${task_list_id}`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
-
       setDataTask(response.data.message);
-      console.log(response.data.message);
+
+      const user = await axios.get(`http://localhost:3000/api/user`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUserList(user.data.message);
     } catch (error) {
       console.log("Gagal mengambil data.");
     }
@@ -134,17 +142,89 @@ export default function Task() {
     updateData();
   };
 
+  const handleInvite = async (e) => {
+    e.preventDefault;
+
+    try {
+      console.log(dataForm);
+      const token = localStorage.getItem("access_token");
+      await axios.post("http://localhost:3000/api/collaborator/add", dataForm, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setAddCollaborator(false);
+      setError("");
+    } catch (error) {
+      setAddCollaborator(false);
+      setError(error.response.data.message);
+      console.log("Gagal mengirimkan data");
+      console.log(error);
+    }
+  };
+
+  const handleAdd = async (e) => {
+    e.preventDefault;
+
+    setAddCollaborator(!addCollaborator);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDataForm({ ...dataForm, [name]: value });
+  };
+
   useEffect(() => {
     fetchData();
 
     if (oldData) {
       setClicked(false);
     }
+    setDataForm({ ...dataForm, task_list_id: task_list_id });
   }, [task_list_id]);
 
   return (
     <>
-      <h1>Daftar Tugas</h1>
+      <h1>Tugas</h1>
+      {error && (
+        <>
+          <p style={{ color: "red" }}>{error}</p>
+        </>
+      )}
+      {!addCollaborator && (
+        <>
+          <button onClick={handleAdd}>Invite Collaborator</button>
+        </>
+      )}
+      {addCollaborator && (
+        <>
+          <table>
+            <tbody>
+              <tr>
+                <td colSpan={2}>
+                  <select name="email" id="email" onChange={handleChange}>
+                    <option value=""></option>
+                    {userList.map((user) => {
+                      return (
+                        <option value={user.email} key={user.id}>
+                          {user.email}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <button onClick={handleInvite}>Invite</button>
+                </td>
+                <td>
+                  <button onClick={handleAdd}>Cancel</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </>
+      )}
+
       <table>
         <thead>
           <tr>

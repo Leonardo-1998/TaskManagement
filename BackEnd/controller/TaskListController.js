@@ -6,13 +6,16 @@ class TaskListController {
       const { id } = req.user;
 
       const query = `
-        SELECT * FROM "Task_Lists"
-        WHERE user_id = $1 AND is_deleted = false
-        ORDER BY position
+        SELECT t.id, t.nama, t.deskripsi, t.position, t.is_deleted, t.user_id FROM "Task_Lists" t
+          LEFT JOIN "Collaborators" c ON  c.task_list_id = t.id
+        WHERE (t.user_id = $1 OR c.user_id =$1) AND is_deleted = false
+        ORDER BY t.id
+       ;
       `;
 
       const values = [id];
       const { rows: tasksListData } = await pool.query(query, values);
+      console.log(tasksListData);
 
       res.status(200).json({
         statusCode: 200,
@@ -29,7 +32,7 @@ class TaskListController {
       const { id } = req.user;
 
       let position = 1;
-      const lastData = await TaskListController.getLastDataTaskList(id);
+      const lastData = await TaskListController.getLastDataTaskList();
       if (lastData) {
         position = lastData.position + 1;
       }
@@ -205,6 +208,21 @@ class TaskListController {
     }
   }
 
+  static async getOneTasksList(req, res, next) {
+    try {
+      const { id } = req.user;
+
+      const taskList = await TaskListController.getOneById(id);
+
+      res.status(200).json({
+        statusCode: 200,
+        message: taskList,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getOneById(id) {
     const query = `
       SELECT * FROM "Task_Lists"
@@ -217,16 +235,13 @@ class TaskListController {
     return dataTaskList[0];
   }
 
-  static async getLastDataTaskList(id) {
+  static async getLastDataTaskList() {
     const query = `
       SELECT * FROM "Task_Lists"
-      WHERE user_id = $1
       ORDER BY position DESC
       LIMIT 1
     `;
-
-    const values = [id];
-    const { rows: lastData } = await pool.query(query, values);
+    const { rows: lastData } = await pool.query(query);
     return lastData[0];
   }
 }

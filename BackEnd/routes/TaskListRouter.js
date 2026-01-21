@@ -21,5 +21,6 @@ router.put(
 );
 router.put("/soft_delete/:id", TaskListController.softDeleteTaskList);
 router.delete("/delete/:id", TaskListController.deleteTaskList);
+router.get("/:id", TaskListController.getOneTasksList);
 
 module.exports = router;
