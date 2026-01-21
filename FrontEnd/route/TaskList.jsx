@@ -158,7 +158,7 @@ export default function Home() {
   return (
     <>
       <div className="flex justify-center item-start pt-[5vh]">
-        <Card className="w-[95%] mx-auto">
+        <Card className="w-[75%] mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl">Task List</CardTitle>
           </CardHeader>
