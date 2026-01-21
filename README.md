@@ -86,3 +86,8 @@ npm run dev
 # Run frontend (from frontend folder)
 npm run dev
 ```
+
+## Fitur bonus yang ditambahkan
+
+- Undo/redo untuk edit task.
+- Soft delete untuk task/task list.
