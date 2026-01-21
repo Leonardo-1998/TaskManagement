@@ -117,7 +117,7 @@ export default function UpdateTask() {
                     id="judul"
                     onChange={handleChange}
                     value={dataForm.judul}
-                    placeholder="Enter a title"
+                    placeholder="Enter task title"
                     required
                   />
                 </div>
@@ -161,12 +161,9 @@ export default function UpdateTask() {
               </div>
             </form>
           </CardContent>
-
           <CardFooter className="flex-col gap-2">
             <Button className="w-full" asChild>
-              <Link to={`/task_list/${task_list_id}`}>
-                <button>Cancel</button>
-              </Link>
+              <Link to={`/task_list/${task_list_id}`}>Cancel</Link>
             </Button>
           </CardFooter>
         </Card>

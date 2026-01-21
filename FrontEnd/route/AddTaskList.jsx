@@ -78,7 +78,7 @@ export default function AddTaskList() {
                     id="nama"
                     name="nama"
                     type="text"
-                    placeholder="Proyek A"
+                    placeholder="Enter task list name"
                     required
                     onChange={handleChange}
                     value={dataForm.nama}
@@ -89,7 +89,7 @@ export default function AddTaskList() {
                     <Label htmlFor="deskripsi">Deskripsi</Label>
                   </div>
                   <Textarea
-                    placeholder="Type your message here."
+                    placeholder="Type your description here."
                     name="deskripsi"
                     id="deskripsi"
                     type="text"
