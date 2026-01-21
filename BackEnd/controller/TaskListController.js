@@ -53,39 +53,42 @@ class TaskListController {
     }
   }
 
-  // masih harus di betulkan
   static async swapTaskList(req, res, next) {
     try {
       const { upperData, lowerData } = req.body;
-      console.log(upperData);
-      console.log(lowerData);
 
       const searchUpperData = await TaskListController.getOneById(upperData.id);
       const searchLowerData = await TaskListController.getOneById(lowerData.id);
+
       if (!searchUpperData || !searchLowerData) {
         const error = new Error("Tidak ada data yang diupdate.");
         error.statusCode = 400;
         throw error;
       }
 
-      await pool.query("BEGIN");
+      const query = `
+            UPDATE "Task_Lists"
+            SET position = CASE
+              WHEN id = $1 THEN $2::integer
+              WHEN id = $3 THEN $4::integer
+            END
+            WHERE id IN ($1, $3)
+            RETURNING *
+            ;
+        `;
 
-      await pool.query(`UPDATE "Task_Lists" SET position = $1 WHERE id = $2`, [
-        upperData.position,
-        lowerData.id,
-      ]);
-
-      await pool.query(`UPDATE "Task_Lists" SET position = $1 WHERE id = $2`, [
-        lowerData.position,
+      const values = [
         upperData.id,
-      ]);
+        lowerData.position,
+        lowerData.id,
+        upperData.position,
+      ];
 
-      await pool.query("COMMIT");
-      console.log("=====================");
+      const { rows: dataTaskLists } = await pool.query(query, values);
 
       res.status(200).json({
         statusCode: 200,
-        message: "Berhasil menukar data",
+        message: dataTaskLists,
       });
     } catch (error) {
       next(error);

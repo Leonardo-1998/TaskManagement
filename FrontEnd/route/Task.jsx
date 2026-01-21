@@ -96,16 +96,28 @@ export default function Task() {
 
   const handleSwapUp = (index) => {
     const dataToSwap = {
-      upperData: dataTask[index - 1],
-      lowerData: dataTask[index],
+      upperData: {
+        id: dataTask[index - 1].id,
+        position: dataTask[index - 1].position,
+      },
+      lowerData: {
+        id: dataTask[index].id,
+        position: dataTask[index].position,
+      },
     };
     handleSwap(dataToSwap);
   };
 
   const handleSwapDown = (index) => {
     const dataToSwap = {
-      upperData: dataTask[index],
-      lowerData: dataTask[index + 1],
+      upperData: {
+        id: dataTask[index].id,
+        position: dataTask[index].position,
+      },
+      lowerData: {
+        id: dataTask[index + 1].id,
+        position: dataTask[index + 1].position,
+      },
     };
     handleSwap(dataToSwap);
   };
@@ -205,6 +217,7 @@ export default function Task() {
   const handleAdd = async (e) => {
     e.preventDefault;
 
+    setError(false);
     setAddCollaborator(!addCollaborator);
   };
 
@@ -229,6 +242,9 @@ export default function Task() {
           </CardHeader>
           {!addCollaborator && (
             <>
+              <CardContent>
+                {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+              </CardContent>
               <CardFooter>
                 <Button
                   variant="outline"

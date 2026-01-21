@@ -62,11 +62,11 @@ export default function Home() {
     const dataToSwap = {
       upperData: {
         id: dataTaskList[index - 1].id,
-        position: dataTaskList[index - 1].id,
+        position: dataTaskList[index - 1].position,
       },
       lowerData: {
         id: dataTaskList[index].id,
-        position: dataTaskList[index].id,
+        position: dataTaskList[index].position,
       },
     };
     handleSwap(dataToSwap);
@@ -76,11 +76,11 @@ export default function Home() {
     const dataToSwap = {
       upperData: {
         id: dataTaskList[index].id,
-        position: dataTaskList[index].id,
+        position: dataTaskList[index].position,
       },
       lowerData: {
         id: dataTaskList[index + 1].id,
-        position: dataTaskList[index + 1].id,
+        position: dataTaskList[index + 1].position,
       },
     };
     handleSwap(dataToSwap);

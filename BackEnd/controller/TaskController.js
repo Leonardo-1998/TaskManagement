@@ -80,9 +80,9 @@ class TaskController {
 
       const values = [
         upperData.id,
-        parseInt(lowerData.position),
+        lowerData.position,
         lowerData.id,
-        parseInt(upperData.position),
+        upperData.position,
       ];
 
       const { rows: dataTasks } = await pool.query(query, values);
